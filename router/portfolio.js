@@ -14,8 +14,11 @@ const crud = async (type, info) => {
     if (type === 'post') {
         await collection.insertOne(info);
     }
-    const data = await collection.find().toArray();
+    if (type == 'delete') {
+        await collection.deleteOne(info);
+    }
 
+    const data = await collection.find().toArray();
     return data;
 }
 
@@ -27,6 +30,9 @@ testRouter.post('/insert', async function (req, res) {
     res.send(await crud('post', req.body));
 })
 
+testRouter.delete('/delete', async function (req, res) {
+    res.send(await crud('delete', { num: Number(req.query.num) }));
+})
 
 module.exports = testRouter;
 
